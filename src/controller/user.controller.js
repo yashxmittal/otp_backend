@@ -21,7 +21,6 @@ try{
 
     const projection = { _id: 0, __v:0}
     const isUserPresent = await user.findOne({"phoneNumber" : req.body.phoneNumber},projection);
-    console.log(isUserPresent)
     if(req.body.phoneNumber == isUserPresent?.phoneNumber){
         res.status(409).json({
             status: "Duplicate Record",
