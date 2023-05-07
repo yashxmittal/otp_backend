@@ -2,16 +2,7 @@ const User = require('../models/user.model');
 const { twilio, verify } = require('../sms-service/sms.service');
 exports.findOne = async function(req, res){
     try{
-        // verify if user exists or not
         const phoneNumber = req.body.phoneNumber;
-        const projection = { _id: 0, __v:0}
-        const isUserPresent = await User.findOne({"phoneNumber" : phoneNumber},projection);
-
-        /**
-         * if user present then redirect it to twilio apis
-         * for otp verification
-         */
-        if(!!isUserPresent){
             const result = await twilio(phoneNumber)
             if(result == 'pending'){
                 res.status(200).json({
@@ -25,23 +16,22 @@ exports.findOne = async function(req, res){
                     message: "Their is some error from the server side"
                 })
             }
-        }
-        /**
-         * if user isnot present then redirect it to register himself first
-         */
     }catch(err){
         console.log(err)
     }
 }
     
-
+/**
+ * This funciton sends the otp with the number linked with that otp and verify it
+ * @param {phoneNumber} req.body
+ * @param {otp} req.body 
+ */
 exports.verify = async function(req, res){
         try{
             const otp = req.body.otp;
             const phoneNumber = req.body.phoneNumber;
             const projection = { _id: 0, __v:0}
             const isUserPresent = await User.findOne({"phoneNumber" : phoneNumber},projection);
-            const userName = isUserPresent.name;
             const result = await verify(phoneNumber,otp);
             if(result == "pending"){
                 res.status(401).json({
@@ -49,11 +39,21 @@ exports.verify = async function(req, res){
                     message: "OTP entered is in-correct",
                 })
             } 
-            else if(result == "approved"){
-                res.status(200).json({
-                    type: "Success",
-                    message: `WELCOME! ${userName} ` 
-                })
+            if(isUserPresent){
+                if(result == "approved"){
+                    const userName = isUserPresent.name;
+                    res.status(200).json({
+                        type: "Success",
+                        message: `WELCOME! ${userName} ` 
+                    })
+                }
+            } else{
+                if(result == "approved"){
+                    res.status(404).json({
+                        type: "Not Found",
+                        message: "user is not registered. Please register it using api </user/reg>"
+                    })
+                }
             }
         }catch(error){
             console.log(error)
