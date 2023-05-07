@@ -1,34 +1,41 @@
 // Download the helper library from https://www.twilio.com/docs/node/install
 // Set environment variables for your credentials
 // Read more at http://twil.io/secure
+// /**
+//  * NEVER STORE BELOW DETAILS HARDCODED 
+//  * its a bad practice w.r.t security
+//  *          //TO DO //
+//  * make a backend global_config and store sensitive info there
+//  */
 const accountSid = "AC59664a913c453f9dc6bc36b73a73b7d2";
-const authToken = "e5e46a77ee6f18b8862818debe4599f6";
+const authToken = "e43f9abeb7ba89ce0e7c94627b2c85e7";
 const verifySid = "VAb230cce068ab97d76865a4e90f71376c";
 const client = require("twilio")(accountSid, authToken);
 
+var verificationStatus;
 
+exports.twilio = async (phoneNumber) => {
+   await client.verify.v2
+    .services(verifySid)
+    .verifications.create({ to: `+91${phoneNumber}`, channel: "sms" })
+    .then(async (verification) => {
+      verificationStatus = await verification.status; 
+      // console.log(verification.status)
+    })
+    return await verificationStatus;
+  }
 
-/** 
- *  This will call apis of Twilio and handle sending otp and verifying otp
- *  We are using status send by this after it verify the otp
-*/
-
-
-
-client.verify.v2
-  .services(verifySid)
-  .verifications.create({ to: "+918273623243", channel: "sms" })
-  .then((verification) => console.log(verification.status))
-  .then(() => {
-    const readline = require("readline").createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
-    readline.question("Please enter the OTP:", (otpCode) => {
-      client.verify.v2
-        .services(verifySid)
-        .verificationChecks.create({ to: "+918273623243", code: otpCode })
-        .then((verification_check) => console.log(verification_check.status))
-        .then(() => readline.close());
-    });
-  });
+exports.verify = async (phoneNumber, otpCode) => {
+   try{
+    await client.verify.v2
+    .services(verifySid)
+    .verificationChecks.create({ to: `+91${phoneNumber}`, code: otpCode })
+    .then(async (verification_check) => {
+      verificationStatus = await verification_check.status;
+      // console.log(verification_check.status)
+     })
+     return await verificationStatus;
+    }catch(err){
+      console.log(error)
+    }
+  }

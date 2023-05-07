@@ -20,6 +20,11 @@ app.get("/", (req, res) => {
   });
 });
 
+require('./routes/otp.routes')(app);
+
+
+
+
 // page not found error handling  middleware
 app.use("*", (req, res, next) => {
     const error = {
