@@ -1,3 +1,4 @@
+const { REFERAL_CODES } = require('../config/config');
 const user = require('../models/user.model');
 exports.userRegister = async (req, res) => {
 try{
@@ -28,13 +29,38 @@ try{
         });
     } else{
         const result = await User.save();
-        res.status(201).json({
+        res.status(201).json({data : {
             phoneNumber: req.body.phoneNumber,
             name: req.body.name,
             dateOfBirth: req.body.dateOfBirth
-        })
+        }, details: {
+            status: "User Successfully Registered",
+            message: "To proceed hit api </user/referal> for referal code validation"
+        }})
  }    
 }catch(error){
     console.log(error);
 }
+}
+
+exports.validateReferal = async (req, res) => {
+    const referalCode = req.body.referalCode;
+    const referals  = REFERAL_CODES.split(" ");
+    const a = referals.some((item)=> {
+        if(item == referalCode){
+            return true
+        }
+        return false
+    })
+    if(a){
+        res.status(200).json({
+            status: "Success",
+            message: "Entered referal code is correct"
+        })
+    }else{
+        res.status(406).json({
+            status:"Not Acceptable",
+            message: "Invalid Referal Code"
+        })
+    }
 }
