@@ -53,7 +53,7 @@ app.use("*", (req, res, next) => {
       mongoose.connection.once('open', function() {
         console.log("Successfully connected to the database");
     })  
-      app.listen(process.env.PORT, () => console.log(`Server listening on port ${PORT}`));
+      app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
     } catch (error) {
       console.log(error);
       process.exit(1);
