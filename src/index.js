@@ -21,6 +21,7 @@ app.get("/", (req, res) => {
 });
 
 require('./routes/otp.routes')(app);
+require('./routes/user.routes')(app)
 
 
 
