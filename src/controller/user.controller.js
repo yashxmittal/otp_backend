@@ -3,16 +3,6 @@ const tokenModel = require('../models/token.model');
 const user = require('../models/user.model');
 exports.userRegister = async (req, res) => {
 try{
-    if(!req.body.phoneNumber && !req.body.name && !req.body.email && !req.body.dateOfBirth){
-        res.status(400).json({
-            "message": {
-                "phoneNumber" : "10 digit phone no required",
-                "name": "name is required",
-                "email": "email is required",
-                "dateOfBirth": "dateOfBith is required"
-            } 
-        });
-    }
 
     let User = new user({
             phoneNumber: req.body.phoneNumber,

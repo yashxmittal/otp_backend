@@ -28,40 +28,40 @@ require('./routes/user.routes')(app)
 
 // page not found error handling  middleware
 app.use("*", (req, res, next) => {
-    const error = {
-      status: 404,
-      message: API_ENDPOINT_NOT_FOUND_ERR,
-    };
-    next(error);
-  });
-  
-  // global error handling middleware
-  app.use((err, req, res, next) => {
-    console.log(err);
-    const status = err.status || 500;
-    const message = err.message || SERVER_ERR;
-    const data = err.data || null;
-    res.status(status).json({
-      type: "error",
-      message,
-      data,
-    });
-  });
+  const error = {
+    status: 404,
+    message: API_ENDPOINT_NOT_FOUND_ERR,
+  };
+  next(error);
+});
 
-  (async function() {
-    try {
-      mongoose.Promise = global.Promise;
-      mongoose.connect(MONGODB_URI);
-      mongoose.connection.on('error', function() {
-        console.log('Could not connect to the database. Exiting now...');
-        process.exit();
+// global error handling middleware
+app.use((err, req, res, next) => {
+  console.log(err);
+  const status = err.status || 500;
+  const message = err.message || SERVER_ERR;
+  const data = err.data || null;
+  res.status(status).json({
+    type: "error",
+    message,
+    data,
+  });
+});
+
+(async function () {
+  try {
+    mongoose.Promise = global.Promise;
+    mongoose.connect(MONGODB_URI);
+    mongoose.connection.on('error', function () {
+      console.log('Could not connect to the database. Exiting now...');
+      process.exit();
     });
-      mongoose.connection.once('open', function() {
-        console.log("Successfully connected to the database");
-    })  
-      app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
-    } catch (error) {
-      console.log(error);
-      process.exit(1);
-    }
-  })();
+    mongoose.connection.once('open', function () {
+      console.log("Successfully connected to the database");
+    })
+    app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+})();
