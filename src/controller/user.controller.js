@@ -1,6 +1,14 @@
 const { REFERAL_CODES } = require('../config/config');
 const tokenModel = require('../models/token.model');
 const user = require('../models/user.model');
+
+/**
+ * this function register the user
+ * @param {req.body.phoneNumber} req 
+ * @param {req.body.name} req
+ * @param {req.body.email} req
+ * @param {req.body.dateOfBirth} req 
+ */
 exports.userRegister = async (req, res) => {
     try {
         let User = new user({
@@ -38,7 +46,11 @@ exports.userRegister = async (req, res) => {
         })
     }
 }
-
+/**
+ * This funciton verify the entered referal code
+ * @param {body.referalCode} req 
+ * @param {*} res 
+ */
 exports.validateReferal = async (req, res) => {
     try {
         const referalCode = req.body.referalCode;
@@ -69,6 +81,11 @@ exports.validateReferal = async (req, res) => {
     }
 }
 
+/**
+ * This funciton delete the token for respective user on behalf of it we logged him out
+ * @param {body.req.phoneNumber} req 
+ * @param {*} res 
+ */
 exports.logout = async (req, res) => {
     const phoneNumber = req.body.phoneNumber;
     try {
