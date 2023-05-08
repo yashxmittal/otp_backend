@@ -17,6 +17,9 @@ exports.findOne = async function (req, res) {
         if (isUserPresent) {
             const token = await tokenModel.findOne({ "key": phoneNumber }, projection);
             if (token) {
+                // JWT_SECRET never pass it like this
+                //                   TO DO 
+                // pass them from db
                 const verification = await jwt.verify(token.token, "JWT_SECRET");
                 if (verification) {
                     const userName = isUserPresent.name;
@@ -98,6 +101,9 @@ exports.verify = async function (req, res) {
                 message: "OTP entered is in-correct",
             })
         }
+        // never pass jwt like this 
+        //          to do 
+        //  PASS THEM FROM DB
         const token = jwt.sign({ id: phoneNumber }, "JWT_SECRET", { expiresIn: "12h" });
         const Token = new tokenModel({
             key: phoneNumber,
