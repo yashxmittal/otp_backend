@@ -106,9 +106,9 @@ exports.verify = async function (req, res) {
         // TO do redis implementation for managin token more efficiently
         const tokendb = await tokenModel.findOne({ "key": phoneNumber }, projection);
         if (tokendb) {
-            await tokenModel.findOneAndUpdate({ "key": phoneNumber }, { $set: { "token": token } })
+          await tokenModel.findOneAndUpdate({ "key": phoneNumber }, { $set: { "token": token } })
         } else {
-            await tokenModel.save()
+            await Token.save()
         }
         if (isUserPresent) {
             if (result == "approved") {

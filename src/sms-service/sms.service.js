@@ -8,9 +8,12 @@
 //  * make a backend global_config and store sensitive info there
 //  */
 const accountSid = "AC59664a913c453f9dc6bc36b73a73b7d2";
-const authToken = "e43f9abeb7ba89ce0e7c94627b2c85e7";
+// authToken is valid only for 24h need to update it from the admins account
+// It is very crucial info never ever store it like this store them in dp and make fetch them from there only
+const authToken = "6fa6e5ffe2a0c3ad473c9cd4de6fed3c";
 const verifySid = "VAb230cce068ab97d76865a4e90f71376c";
 const client = require("twilio")(accountSid, authToken);
+
 
 var verificationStatus;
 
@@ -25,6 +28,8 @@ exports.twilio = async (phoneNumber) => {
     .verifications.create({ to: `+91${phoneNumber}`, channel: "sms" })
     .then(async (verification) => {
       verificationStatus = await verification.status;
+    }).catch(e=>{
+      console.log(e)
     })
     return await verificationStatus;
   }
