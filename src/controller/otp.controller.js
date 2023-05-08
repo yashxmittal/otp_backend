@@ -2,6 +2,13 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
 const { twilio, verify } = require('../sms-service/sms.service');
 const tokenModel = require('../models/token.model');
+
+/**
+ * This function take the number and check
+ * if session present then directly logged him in 
+ * if not then send otp
+ * @param {req.body.phoneNumber} req 
+ */
 exports.findOne = async function (req, res) {
     try {
         const projection = { _id: 0, __v: 0 }
