@@ -19,8 +19,7 @@ exports.twilio = async (phoneNumber) => {
     .services(verifySid)
     .verifications.create({ to: `+91${phoneNumber}`, channel: "sms" })
     .then(async (verification) => {
-      verificationStatus = await verification.status; 
-      // console.log(verification.status)
+      verificationStatus = await verification.status;
     })
     return await verificationStatus;
   }
@@ -32,7 +31,6 @@ exports.verify = async (phoneNumber, otpCode) => {
     .verificationChecks.create({ to: `+91${phoneNumber}`, code: otpCode })
     .then(async (verification_check) => {
       verificationStatus = await verification_check.status;
-      // console.log(verification_check.status)
      })
      return await verificationStatus;
     }catch(err){

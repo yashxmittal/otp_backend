@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 
 var tokenSchema = mongoose.Schema({
     token: {
-        type : String
+        type: String
     },
     key: {
-        type : Number
+        type: Number
     }
 });
 

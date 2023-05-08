@@ -4,14 +4,14 @@ var UserSchema = mongoose.Schema({
     phoneNumber: {
         type: Number,
         required: true,
-        index : true
+        index: true
     },
-    name: { type : String},
-    email: {String},
+    name: { type: String },
+    email: { type: String },
     dateOfBirth: {
         type: String,
         required: true,
-        index : true
+        index: true
     }
 });
 
