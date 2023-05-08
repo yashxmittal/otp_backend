@@ -1,0 +1,120 @@
+{
+	"info": {
+		"_postman_id": "39b22218-254c-4f78-b87a-86e9445148dc",
+		"name": "backend_otp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19266987"
+	},
+	"item": [
+		{
+			"name": "enter mobile no",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"phoneNumber\": 8273623243\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4440/otp",
+					"host": [
+						"localhost"
+					],
+					"port": "4440",
+					"path": [
+						"otp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "enter received otp",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"phoneNumber\": 8273623243,\r\n    \"otp\": \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4440/otp/verify",
+					"host": [
+						"localhost"
+					],
+					"port": "4440",
+					"path": [
+						"otp",
+						"verify"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register user",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "validatade referal",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"referalCode\": \"YASH\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4440/user/referal",
+					"host": [
+						"localhost"
+					],
+					"port": "4440",
+					"path": [
+						"user",
+						"referal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4440/user/logout",
+					"host": [
+						"localhost"
+					],
+					"port": "4440",
+					"path": [
+						"user",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
