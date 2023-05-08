@@ -34,7 +34,7 @@ exports.findOne = async function(req, res){
                 }
             }
 
-        }else{
+        else{
             const result = await twilio(phoneNumber)
             if(result == 'pending'){
                 res.status(200).json({
@@ -49,6 +49,22 @@ exports.findOne = async function(req, res){
                 })
             }
         }
+    }else{
+        const result = await twilio(phoneNumber)
+        if(result == 'pending'){
+            res.status(200).json({
+                type: "Success",
+                message: `OTP has been sent on number ${phoneNumber}`,
+                redirecting: "redirect to enter otp api to enter and verify otp </otp/verify>"
+            })
+        } else {
+            res.status(500).json({
+                type: "Internal Server Error",
+                message: "Their is some error from the server side"
+            })
+        }
+
+    }
     }catch(err){
         console.log(err)
     }
@@ -77,7 +93,12 @@ exports.verify = async function(req, res){
                 key: phoneNumber,
                 token : token
             })
-            await Token.save()
+            const tokendb = await tokenModel.findOne({"key" : phoneNumber},projection);
+            if(tokendb){
+                await tokenModel.findOneAndUpdate({"key" : phoneNumber}, {$set:{"token":token}})
+            }else{
+                await tokenModel.save()
+            }
             if(isUserPresent){
                 if(result == "approved"){
                     const userName = isUserPresent.name;
