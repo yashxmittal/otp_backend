@@ -13,6 +13,6 @@ var UserSchema = mongoose.Schema({
         required: true,
         index : true
     }
-})
+});
 
 module.exports = mongoose.model('User', UserSchema);

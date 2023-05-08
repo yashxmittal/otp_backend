@@ -1,5 +1,7 @@
+const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
 const { twilio, verify } = require('../sms-service/sms.service');
+const tokenModel = require('../models/token.model');
 exports.findOne = async function(req, res){
     try{
         const phoneNumber = req.body.phoneNumber;
@@ -39,6 +41,12 @@ exports.verify = async function(req, res){
                     message: "OTP entered is in-correct",
                 })
             } 
+            const token = jwt.sign({id: phoneNumber}, "JWT_SECRET", { expiresIn: "12h"});
+            let Token = new tokenModel({
+                key: phoneNumber,
+                token : token
+            })
+            await Token.save()
             if(isUserPresent){
                 if(result == "approved"){
                     const userName = isUserPresent.name;
