@@ -20,6 +20,8 @@ app.get("/", (req, res) => {
   });
 });
 
+
+// Routes
 require('./routes/otp.routes')(app);
 require('./routes/user.routes')(app)
 
@@ -48,6 +50,7 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Self-Calling function for creating mongo connection when ever app starts
 (async function () {
   try {
     mongoose.Promise = global.Promise;

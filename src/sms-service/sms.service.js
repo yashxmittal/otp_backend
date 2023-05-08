@@ -14,6 +14,11 @@ const client = require("twilio")(accountSid, authToken);
 
 var verificationStatus;
 
+
+// PRE-written code from twilio for receiving otp verification
+
+// this function is used to send phoneNumber as request and receive otp on you number
+// Paid service, it has only limited free otp
 exports.twilio = async (phoneNumber) => {
    await client.verify.v2
     .services(verifySid)
@@ -24,6 +29,7 @@ exports.twilio = async (phoneNumber) => {
     return await verificationStatus;
   }
 
+  // this function take received otp and send status such as verified or not
 exports.verify = async (phoneNumber, otpCode) => {
    try{
     await client.verify.v2
