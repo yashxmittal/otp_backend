@@ -4,7 +4,37 @@ const { twilio, verify } = require('../sms-service/sms.service');
 const tokenModel = require('../models/token.model');
 exports.findOne = async function(req, res){
     try{
+        const projection = { _id: 0, __v:0}
         const phoneNumber = req.body.phoneNumber;
+        const isUserPresent = await User.findOne({"phoneNumber" : phoneNumber},projection);
+        if(isUserPresent){
+            const token = await tokenModel.findOne({"key" : phoneNumber},projection);
+            if(token){
+                const verification = await jwt.verify(token.token, "JWT_SECRET");
+                if(verification){
+                    const userName = isUserPresent.name;
+                    res.status(200).json({
+                        type: "Success",
+                        message: `WELCOME! ${userName} ` 
+                    })
+                }else{
+                    const result = await twilio(phoneNumber)
+                    if(result == 'pending'){
+                        res.status(200).json({
+                            type: "Success",
+                            message: `OTP has been sent on number ${phoneNumber}`,
+                            redirecting: "redirect to enter otp api to enter and verify otp </otp/verify>"
+                        })
+                    } else {
+                        res.status(500).json({
+                            type: "Internal Server Error",
+                            message: "Their is some error from the server side"
+                        })
+                    }
+                }
+            }
+
+        }else{
             const result = await twilio(phoneNumber)
             if(result == 'pending'){
                 res.status(200).json({
@@ -18,6 +48,7 @@ exports.findOne = async function(req, res){
                     message: "Their is some error from the server side"
                 })
             }
+        }
     }catch(err){
         console.log(err)
     }
