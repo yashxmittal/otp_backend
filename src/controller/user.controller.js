@@ -1,4 +1,5 @@
 const { REFERAL_CODES } = require('../config/config');
+const tokenModel = require('../models/token.model');
 const user = require('../models/user.model');
 exports.userRegister = async (req, res) => {
 try{
@@ -62,5 +63,19 @@ exports.validateReferal = async (req, res) => {
             status:"Not Acceptable",
             message: "Invalid Referal Code"
         })
+    }
+}
+
+exports.logout = async (req, res) => {
+    const phoneNumber = req.body.phoneNumber;
+    try{
+        await tokenModel.deleteOne({"key": phoneNumber});
+        res.status(200).json({
+            status: "Successfully loggedOut",
+            message: "User is logged out"
+        })
+    }catch(err){
+        console.log(err);
+        res.status(500).json({err})
     }
 }
